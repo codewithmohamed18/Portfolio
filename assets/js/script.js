@@ -2,55 +2,89 @@
 
 // ===============================
 // MOHAMED KHALID PORTFOLIO SCRIPT
-// Stable navigation-first version
 // ===============================
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // ---------- Sidebar contact layout fix ----------
-  // Keep long email / GitHub / LinkedIn text visible instead of truncating with "...".
+  // ---------- Sidebar contact layout ----------
+  // Force long contact text to display fully and override template ellipsis rules.
   const sidebarStyleFix = document.createElement('style');
   sidebarStyleFix.textContent = `
+    .contacts-list,
+    .contact-item,
     .contact-info {
-      width: 100% !important;
-      max-width: none !important;
-      min-width: 0 !important;
       overflow: visible !important;
-    }
-
-    .contact-info .contact-link,
-    .contact-info address,
-    .contact-info time {
-      white-space: normal !important;
-      overflow: visible !important;
-      text-overflow: clip !important;
-      overflow-wrap: anywhere !important;
-      word-break: break-word !important;
-      line-height: 1.45 !important;
-      max-width: 100% !important;
-    }
-
-    .contact-item {
-      align-items: flex-start !important;
-      min-width: 0 !important;
     }
 
     .contacts-list {
       width: 100% !important;
     }
 
+    .contact-item {
+      display: grid !important;
+      grid-template-columns: 46px minmax(0, 1fr) !important;
+      gap: 16px !important;
+      align-items: center !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .contact-item .icon-box {
+      flex-shrink: 0 !important;
+    }
+
+    .contact-info {
+      width: auto !important;
+      max-width: none !important;
+      min-width: 0 !important;
+    }
+
+    .contact-info .contact-link,
+    .contact-info address,
+    .contact-info time {
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      line-height: 1.45 !important;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar {
+        width: 340px !important;
+        max-width: 340px !important;
+      }
+    }
+
     @media (min-width: 1250px) {
       .sidebar {
-        width: 320px !important;
-        flex: 0 0 320px !important;
+        width: 360px !important;
+        max-width: 360px !important;
+        flex: 0 0 360px !important;
       }
 
       main {
-        max-width: 1280px !important;
+        max-width: 1350px !important;
       }
     }
   `;
   document.head.appendChild(sidebarStyleFix);
+
+  // Belt-and-suspenders: remove any inline/computed truncation rules from contact values.
+  document.querySelectorAll('.contact-info .contact-link, .contact-info address, .contact-info time').forEach(function (element) {
+    element.style.setProperty('white-space', 'normal', 'important');
+    element.style.setProperty('overflow', 'visible', 'important');
+    element.style.setProperty('text-overflow', 'clip', 'important');
+    element.style.setProperty('max-width', 'none', 'important');
+    element.style.setProperty('width', '100%', 'important');
+    element.style.setProperty('overflow-wrap', 'anywhere', 'important');
+    element.style.setProperty('word-break', 'break-word', 'important');
+  });
 
   // ---------- Sidebar ----------
   const sidebar = document.querySelector('[data-sidebar]');
@@ -73,8 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
   navLinks.forEach(function (link) {
     link.addEventListener('click', function () {
       let target = normalize(link.textContent);
-
-      // Navbar label is "My Projects" but the existing template section uses data-page="blog".
       if (target === 'my projects') target = 'blog';
 
       pages.forEach(function (page) {
@@ -102,8 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     filterItems.forEach(function (item) {
       const itemCategory = normalize(item.dataset.category);
-      const visible = category === 'all' || itemCategory === category;
-      item.classList.toggle('active', visible);
+      item.classList.toggle('active', category === 'all' || itemCategory === category);
     });
   }
 
@@ -148,5 +179,4 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
-
 });
