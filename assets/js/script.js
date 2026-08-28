@@ -6,9 +6,10 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  // ---------- Portfolio layout refinements ----------
-  const layoutFix = document.createElement('style');
-  layoutFix.textContent = `
+  // ---------- Sidebar contact layout ----------
+  // Force long contact text to display fully and override template ellipsis rules.
+  const sidebarStyleFix = document.createElement('style');
+  sidebarStyleFix.textContent = `
     .contacts-list,
     .contact-item,
     .contact-info {
@@ -26,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
       align-items: center !important;
       width: 100% !important;
       min-width: 0 !important;
+    }
+
+    .contact-item .icon-box {
+      flex-shrink: 0 !important;
     }
 
     .contact-info {
@@ -49,88 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
       line-height: 1.45 !important;
     }
 
-    /* Clean recruiter-friendly skills layout */
-    .skill .skills-list {
-      padding: 24px !important;
-    }
-
-    .skill .skills-item:not(:last-child) {
-      margin-bottom: 24px !important;
-    }
-
-    .skill .title-wrapper {
-      display: grid !important;
-      grid-template-columns: minmax(0, 1fr) 52px !important;
-      align-items: end !important;
-      gap: 16px !important;
-      width: 100% !important;
-      margin-bottom: 9px !important;
-    }
-
-    .skill .title-wrapper .h5 {
-      min-width: 0 !important;
-      margin: 0 !important;
-      line-height: 1.45 !important;
-      font-size: 14px !important;
-      font-weight: 600 !important;
-    }
-
-    .skill .title-wrapper .h5 span {
-      display: inline !important;
-      color: var(--light-gray) !important;
-      font-size: 13px !important;
-      font-weight: 400 !important;
-    }
-
-    .skill .title-wrapper data {
-      justify-self: end !important;
-      align-self: end !important;
-      width: 52px !important;
-      text-align: right !important;
-      color: var(--orange-yellow-crayola) !important;
-      font-size: 13px !important;
-      font-weight: 500 !important;
-      line-height: 1.45 !important;
-    }
-
-    .skill-progress-bg {
-      width: 100% !important;
-      height: 7px !important;
-      overflow: hidden !important;
-      border-radius: 999px !important;
-    }
-
-    .skill-progress-fill {
-      border-radius: 999px !important;
-    }
-
-    @media (max-width: 520px) {
-      .skill .skills-list {
-        padding: 18px !important;
-      }
-
-      .skill .title-wrapper {
-        grid-template-columns: minmax(0, 1fr) 44px !important;
-        gap: 10px !important;
-      }
-
-      .skill .title-wrapper .h5 {
-        font-size: 13px !important;
-      }
-
-      .skill .title-wrapper .h5 span {
-        display: block !important;
-        margin-top: 2px !important;
-        font-size: 12px !important;
-        line-height: 1.4 !important;
-      }
-
-      .skill .title-wrapper data {
-        width: 44px !important;
-        font-size: 12px !important;
-      }
-    }
-
     @media (min-width: 768px) {
       .sidebar {
         width: 340px !important;
@@ -150,7 +73,17 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   `;
-  document.head.appendChild(layoutFix);
+  document.head.appendChild(sidebarStyleFix);
+
+  document.querySelectorAll('.contact-info .contact-link, .contact-info address, .contact-info time').forEach(function (element) {
+    element.style.setProperty('white-space', 'normal', 'important');
+    element.style.setProperty('overflow', 'visible', 'important');
+    element.style.setProperty('text-overflow', 'clip', 'important');
+    element.style.setProperty('max-width', 'none', 'important');
+    element.style.setProperty('width', '100%', 'important');
+    element.style.setProperty('overflow-wrap', 'anywhere', 'important');
+    element.style.setProperty('word-break', 'break-word', 'important');
+  });
 
   // ---------- Sidebar ----------
   const sidebar = document.querySelector('[data-sidebar]');
@@ -197,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function filterProjects(category) {
     category = normalize(category);
+
     filterItems.forEach(function (item) {
       const itemCategory = normalize(item.dataset.category);
       item.classList.toggle('active', category === 'all' || itemCategory === category);
