@@ -86,6 +86,23 @@ document.addEventListener('DOMContentLoaded', function () {
     element.style.setProperty('word-break', 'break-word', 'important');
   });
 
+  // ---------- Career focus section ----------
+  // Keep the existing skill-card design, but show the actual data roles/areas being targeted.
+  const skillsHeading = document.querySelector('.skills-title');
+  if (skillsHeading) skillsHeading.textContent = 'Career Focus';
+
+  const careerAreas = [
+    'Data Analysis',
+    'Business Analysis',
+    'Business Intelligence',
+    'Data Engineering',
+    'Data Visualization & Reporting'
+  ];
+
+  document.querySelectorAll('.skills-item .h5').forEach(function (skill, index) {
+    if (careerAreas[index]) skill.textContent = careerAreas[index];
+  });
+
   // ---------- Sidebar ----------
   const sidebar = document.querySelector('[data-sidebar]');
   const sidebarBtn = document.querySelector('[data-sidebar-btn]');
