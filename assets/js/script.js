@@ -7,6 +7,51 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  // ---------- Sidebar contact layout fix ----------
+  // Keep long email / GitHub / LinkedIn text visible instead of truncating with "...".
+  const sidebarStyleFix = document.createElement('style');
+  sidebarStyleFix.textContent = `
+    .contact-info {
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      overflow: visible !important;
+    }
+
+    .contact-info .contact-link,
+    .contact-info address,
+    .contact-info time {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+      line-height: 1.45 !important;
+      max-width: 100% !important;
+    }
+
+    .contact-item {
+      align-items: flex-start !important;
+      min-width: 0 !important;
+    }
+
+    .contacts-list {
+      width: 100% !important;
+    }
+
+    @media (min-width: 1250px) {
+      .sidebar {
+        width: 320px !important;
+        flex: 0 0 320px !important;
+      }
+
+      main {
+        max-width: 1280px !important;
+      }
+    }
+  `;
+  document.head.appendChild(sidebarStyleFix);
+
   // ---------- Sidebar ----------
   const sidebar = document.querySelector('[data-sidebar]');
   const sidebarBtn = document.querySelector('[data-sidebar-btn]');
