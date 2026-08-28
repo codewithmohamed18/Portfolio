@@ -1,139 +1,107 @@
 'use strict';
 
-// Small helper used throughout the template
-const elementToggleFunc = (elem) => {
-  if (elem) elem.classList.toggle('active');
-};
+// ===============================
+// MOHAMED KHALID PORTFOLIO SCRIPT
+// Stable navigation-first version
+// ===============================
 
-// Sidebar
-const sidebar = document.querySelector('[data-sidebar]');
-const sidebarBtn = document.querySelector('[data-sidebar-btn]');
+document.addEventListener('DOMContentLoaded', function () {
 
-if (sidebar && sidebarBtn) {
-  sidebarBtn.addEventListener('click', () => elementToggleFunc(sidebar));
-}
+  // ---------- Sidebar ----------
+  const sidebar = document.querySelector('[data-sidebar]');
+  const sidebarBtn = document.querySelector('[data-sidebar-btn]');
 
-// Testimonials (optional section)
-const testimonialsItem = document.querySelectorAll('[data-testimonials-item]');
-const modalContainer = document.querySelector('[data-modal-container]');
-const modalCloseBtn = document.querySelector('[data-modal-close-btn]');
-const overlay = document.querySelector('[data-overlay]');
-const modalImg = document.querySelector('[data-modal-img]');
-const modalTitle = document.querySelector('[data-modal-title]');
-const modalText = document.querySelector('[data-modal-text]');
+  if (sidebar && sidebarBtn) {
+    sidebarBtn.addEventListener('click', function () {
+      sidebar.classList.toggle('active');
+    });
+  }
 
-const testimonialsModalFunc = () => {
-  if (modalContainer) modalContainer.classList.toggle('active');
-  if (overlay) overlay.classList.toggle('active');
-};
+  // ---------- Main navigation ----------
+  const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
+  const pages = Array.from(document.querySelectorAll('[data-page]'));
 
-if (modalContainer && modalImg && modalTitle && modalText) {
-  testimonialsItem.forEach((item) => {
+  function normalize(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      let target = normalize(link.textContent);
+
+      // Navbar label is "My Projects" but the existing template section uses data-page="blog".
+      if (target === 'my projects') target = 'blog';
+
+      pages.forEach(function (page) {
+        page.classList.toggle('active', normalize(page.dataset.page) === target);
+      });
+
+      navLinks.forEach(function (item) {
+        item.classList.remove('active');
+      });
+
+      link.classList.add('active');
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // ---------- Portfolio filtering ----------
+  const filterItems = Array.from(document.querySelectorAll('[data-filter-item]'));
+  const filterButtons = Array.from(document.querySelectorAll('[data-filter-btn]'));
+  const select = document.querySelector('[data-select]');
+  const selectItems = Array.from(document.querySelectorAll('[data-select-item]'));
+  const selectValue = document.querySelector('[data-selecct-value]');
+
+  function filterProjects(category) {
+    category = normalize(category);
+
+    filterItems.forEach(function (item) {
+      const itemCategory = normalize(item.dataset.category);
+      const visible = category === 'all' || itemCategory === category;
+      item.classList.toggle('active', visible);
+    });
+  }
+
+  filterButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      const category = normalize(button.textContent);
+      filterProjects(category);
+
+      filterButtons.forEach(function (item) {
+        item.classList.remove('active');
+      });
+
+      button.classList.add('active');
+      if (selectValue) selectValue.textContent = button.textContent.trim();
+    });
+  });
+
+  if (select) {
+    select.addEventListener('click', function () {
+      select.classList.toggle('active');
+    });
+  }
+
+  selectItems.forEach(function (item) {
     item.addEventListener('click', function () {
-      const avatar = this.querySelector('[data-testimonials-avatar]');
-      const title = this.querySelector('[data-testimonials-title]');
-      const text = this.querySelector('[data-testimonials-text]');
-
-      if (!avatar || !title || !text) return;
-
-      modalImg.src = avatar.src;
-      modalImg.alt = avatar.alt;
-      modalTitle.innerHTML = title.innerHTML;
-      modalText.innerHTML = text.innerHTML;
-      testimonialsModalFunc();
+      const category = normalize(item.textContent);
+      filterProjects(category);
+      if (selectValue) selectValue.textContent = item.textContent.trim();
+      if (select) select.classList.remove('active');
     });
   });
-}
 
-if (modalCloseBtn) modalCloseBtn.addEventListener('click', testimonialsModalFunc);
-if (overlay) overlay.addEventListener('click', testimonialsModalFunc);
+  // ---------- Contact form ----------
+  const form = document.querySelector('[data-form]');
+  const formInputs = Array.from(document.querySelectorAll('[data-form-input]'));
+  const formBtn = document.querySelector('[data-form-btn]');
 
-// Portfolio filter (optional section)
-const select = document.querySelector('[data-select]');
-const selectItems = document.querySelectorAll('[data-select-item]');
-const selectValue = document.querySelector('[data-selecct-value]');
-const filterBtn = document.querySelectorAll('[data-filter-btn]');
-const filterItems = document.querySelectorAll('[data-filter-item]');
-
-const filterFunc = (selectedValue) => {
-  filterItems.forEach((item) => {
-    const shouldShow = selectedValue === 'all' || selectedValue === item.dataset.category;
-    item.classList.toggle('active', shouldShow);
-  });
-};
-
-if (select) {
-  select.addEventListener('click', function () {
-    elementToggleFunc(this);
-  });
-}
-
-selectItems.forEach((item) => {
-  item.addEventListener('click', function () {
-    const selectedValue = this.innerText.toLowerCase().trim();
-    if (selectValue) selectValue.innerText = this.innerText;
-    elementToggleFunc(select);
-    filterFunc(selectedValue);
-  });
-});
-
-let lastClickedBtn = filterBtn.length ? filterBtn[0] : null;
-
-filterBtn.forEach((btn) => {
-  btn.addEventListener('click', function () {
-    const selectedValue = this.innerText.toLowerCase().trim();
-    if (selectValue) selectValue.innerText = this.innerText;
-    filterFunc(selectedValue);
-
-    if (lastClickedBtn) lastClickedBtn.classList.remove('active');
-    this.classList.add('active');
-    lastClickedBtn = this;
-  });
-});
-
-// Contact form (optional section)
-const form = document.querySelector('[data-form]');
-const formInputs = document.querySelectorAll('[data-form-input]');
-const formBtn = document.querySelector('[data-form-btn]');
-
-if (form && formBtn) {
-  formInputs.forEach((input) => {
-    input.addEventListener('input', () => {
-      if (form.checkValidity()) {
-        formBtn.removeAttribute('disabled');
-      } else {
-        formBtn.setAttribute('disabled', '');
-      }
+  if (form && formBtn) {
+    formInputs.forEach(function (input) {
+      input.addEventListener('input', function () {
+        formBtn.disabled = !form.checkValidity();
+      });
     });
-  });
-}
+  }
 
-// Page navigation
-const navigationLinks = document.querySelectorAll('[data-nav-link]');
-const pages = document.querySelectorAll('[data-page]');
-
-// Your navbar says "My Projects", while the original template page is named "blog".
-// This alias lets the button work without forcing you to rename the whole section immediately.
-const pageAliases = {
-  'my projects': 'blog'
-};
-
-navigationLinks.forEach((link) => {
-  link.addEventListener('click', function () {
-    const requestedName = this.textContent.toLowerCase().trim();
-    const targetPage = pageAliases[requestedName] || requestedName;
-
-    let matched = false;
-
-    pages.forEach((page) => {
-      const isTarget = page.dataset.page === targetPage;
-      page.classList.toggle('active', isTarget);
-      if (isTarget) matched = true;
-    });
-
-    navigationLinks.forEach((navLink) => navLink.classList.remove('active'));
-    if (matched) this.classList.add('active');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
 });
