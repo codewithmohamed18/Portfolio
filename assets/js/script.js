@@ -166,6 +166,95 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
   }
 
+  // ---------- Portfolio project sync ----------
+  // Keep the strong portfolio projects, restore the projects from the previous portfolio,
+  // and remove the three visualizer/demo projects requested by the user.
+  const portfolioList = document.querySelector('.portfolio .project-list');
+
+  if (portfolioList) {
+    const removedRepos = [
+      'Medical-Data-Visualizer-Public',
+      'Page-View-Time-Series-Visualizer',
+      'demographic-data-analyzer'
+    ];
+
+    Array.from(portfolioList.querySelectorAll('.project-item')).forEach(function (item) {
+      const link = item.querySelector('a');
+      const href = link ? link.getAttribute('href') || '' : '';
+      if (removedRepos.some(function (repo) { return href.includes(repo); })) {
+        item.remove();
+      }
+    });
+
+    // Use the previous portfolio naming for the customer analytics project.
+    const customerProject = Array.from(portfolioList.querySelectorAll('.project-item')).find(function (item) {
+      const link = item.querySelector('a');
+      return link && (link.getAttribute('href') || '').includes('customer-shopping-behavior-analysis');
+    });
+    if (customerProject) {
+      const title = customerProject.querySelector('.project-title');
+      if (title) title.textContent = 'Customer Shopping Trends';
+    }
+
+    const addProject = function (config) {
+      const exists = Array.from(portfolioList.querySelectorAll('a')).some(function (link) {
+        return (link.getAttribute('href') || '') === config.href;
+      });
+      if (exists) return;
+
+      const item = document.createElement('li');
+      item.className = 'project-item active';
+      item.setAttribute('data-filter-item', '');
+      item.setAttribute('data-category', config.category.toLowerCase());
+      item.innerHTML = `
+        <a href="${config.href}" target="_blank" rel="noopener noreferrer">
+          <figure class="project-img">
+            <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+            <img src="${config.image}" alt="${config.title}" loading="lazy">
+          </figure>
+          <h3 class="project-title">${config.title}</h3>
+          <p class="project-category">${config.category}</p>
+        </a>
+      `;
+      portfolioList.appendChild(item);
+    };
+
+    addProject({
+      href: 'https://github.com/codewithmohamed18/video_game_analysis',
+      title: 'Video Game Analysis',
+      category: 'Python',
+      image: './assets/images/project-5.png'
+    });
+
+    addProject({
+      href: 'https://github.com/codewithmohamed18/amazon_books_sales_analysis',
+      title: 'Amazon Book Analysis',
+      category: 'SQL Queries',
+      image: './assets/images/project-6.png'
+    });
+
+    // Make SQL Queries available as a filter because Amazon Book Analysis uses it.
+    const desktopFilterList = document.querySelector('.portfolio .filter-list');
+    if (desktopFilterList && !Array.from(desktopFilterList.querySelectorAll('[data-filter-btn]')).some(function (btn) {
+      return btn.textContent.trim().toLowerCase() === 'sql queries';
+    })) {
+      const li = document.createElement('li');
+      li.className = 'filter-item';
+      li.innerHTML = '<button data-filter-btn>SQL Queries</button>';
+      desktopFilterList.appendChild(li);
+    }
+
+    const mobileSelectList = document.querySelector('.portfolio .select-list');
+    if (mobileSelectList && !Array.from(mobileSelectList.querySelectorAll('[data-select-item]')).some(function (btn) {
+      return btn.textContent.trim().toLowerCase() === 'sql queries';
+    })) {
+      const li = document.createElement('li');
+      li.className = 'select-item';
+      li.innerHTML = '<button data-select-item>SQL Queries</button>';
+      mobileSelectList.appendChild(li);
+    }
+  }
+
   // ---------- Sidebar ----------
   const sidebar = document.querySelector('[data-sidebar]');
   const sidebarBtn = document.querySelector('[data-sidebar-btn]');
@@ -203,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ---------- Portfolio filtering ----------
+  // Query after the portfolio sync above, so new/restored projects and filters are included.
   const filterItems = Array.from(document.querySelectorAll('[data-filter-item]'));
   const filterButtons = Array.from(document.querySelectorAll('[data-filter-btn]'));
   const select = document.querySelector('[data-select]');
