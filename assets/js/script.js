@@ -90,15 +90,15 @@ document.addEventListener('DOMContentLoaded', function () {
   if (skillSection) {
     skillSection.innerHTML = `
       <h3 class="h3 tech-skills-heading">Technical Skills</h3>
-      <p class="tech-skills-intro">A practical toolkit for analytics, business intelligence and modern data workflows.</p>
+      <p class="tech-skills-intro">Core tools and technologies I use across analytics, business intelligence and data engineering projects.</p>
 
       <div class="tech-skills-grid">
-        <article class="tech-skill-card">
+        <div class="tech-skill-card">
           <div class="tech-skill-card-header">
             <div class="tech-skill-icon"><ion-icon name="analytics-outline"></ion-icon></div>
             <div>
-              <h4>Data Analytics & BI</h4>
-              <p>Turning data into clear business decisions</p>
+              <h4>Analytics & Business Intelligence</h4>
+              <p>Business insights, dashboards and decision support</p>
             </div>
           </div>
           <div class="tech-tags">
@@ -109,14 +109,14 @@ document.addEventListener('DOMContentLoaded', function () {
             <span>Dashboard Design</span>
             <span>Data Visualization</span>
           </div>
-        </article>
+        </div>
 
-        <article class="tech-skill-card">
+        <div class="tech-skill-card">
           <div class="tech-skill-card-header">
             <div class="tech-skill-icon"><ion-icon name="code-slash-outline"></ion-icon></div>
             <div>
               <h4>SQL & Python</h4>
-              <p>Analysis, transformation and automation</p>
+              <p>Querying, analysis, transformation and automation</p>
             </div>
           </div>
           <div class="tech-tags">
@@ -127,43 +127,43 @@ document.addEventListener('DOMContentLoaded', function () {
             <span>Pandas</span>
             <span>NumPy</span>
           </div>
-        </article>
+        </div>
 
-        <article class="tech-skill-card">
+        <div class="tech-skill-card">
           <div class="tech-skill-card-header">
             <div class="tech-skill-icon"><ion-icon name="server-outline"></ion-icon></div>
             <div>
               <h4>Data Engineering</h4>
-              <p>Building reliable pipelines and lakehouse workflows</p>
+              <p>ETL/ELT pipelines and modern lakehouse workflows</p>
             </div>
           </div>
           <div class="tech-tags">
-            <span>ETL / ELT</span>
             <span>Azure Data Factory</span>
             <span>Databricks</span>
             <span>PySpark</span>
             <span>ADLS Gen2</span>
             <span>Delta Lake</span>
+            <span>ETL / ELT</span>
           </div>
-        </article>
+        </div>
 
-        <article class="tech-skill-card">
+        <div class="tech-skill-card">
           <div class="tech-skill-card-header">
             <div class="tech-skill-icon"><ion-icon name="layers-outline"></ion-icon></div>
             <div>
               <h4>Data Modeling & Cloud</h4>
-              <p>Structuring clean, scalable and analytics-ready data</p>
+              <p>Analytics-ready models, quality and cloud platforms</p>
             </div>
           </div>
           <div class="tech-tags">
             <span>Star Schema</span>
             <span>Dimensional Modeling</span>
-            <span>Data Cleaning</span>
             <span>Data Quality</span>
             <span>BigQuery</span>
             <span>Azure</span>
+            <span>GCP</span>
           </div>
-        </article>
+        </div>
       </div>
     `;
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
         color: var(--light-gray-70);
         font-size: 13px;
         line-height: 1.6;
-        margin-bottom: 20px;
+        margin-bottom: 22px;
       }
 
       .tech-skills-grid {
@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       .tech-skill-card {
+        display: block !important;
         position: relative;
         padding: 20px;
         background: var(--border-gradient-onyx);
@@ -214,9 +215,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       .tech-skill-icon {
-        width: 38px;
-        height: 38px;
-        flex: 0 0 38px;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
         color: var(--orange-yellow-crayola);
         background: var(--onyx);
         border: 1px solid var(--jet);
-        font-size: 19px;
+        font-size: 20px;
       }
 
       .tech-skill-card h4 {
@@ -232,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
         font-size: 15px;
         font-weight: 600;
         line-height: 1.35;
-        margin: 0 0 3px;
+        margin: 0 0 4px;
       }
 
       .tech-skill-card-header p {
@@ -252,8 +253,8 @@ document.addEventListener('DOMContentLoaded', function () {
         display: inline-flex;
         align-items: center;
         width: auto;
-        padding: 6px 10px;
-        border-radius: 999px;
+        padding: 7px 11px;
+        border-radius: 8px;
         border: 1px solid var(--jet);
         background: var(--eerie-black-1);
         color: var(--light-gray);
